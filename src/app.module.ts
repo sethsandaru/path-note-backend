@@ -6,30 +6,15 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [UsersModule],
+  imports: [
+      UsersModule,
+      ConfigModule.forRoot({
+        isGlobal: true
+      }),
+      TypeOrmModule.forRoot(),
+  ],
   controllers: [AppController],
   providers: [AppService],
-})
-
-@Module({
-    imports: [ConfigModule.forRoot({
-        isGlobal: true
-    })],
-})
-
-@Module({
-    imports: [
-        TypeOrmModule.forRoot({
-            type: 'mysql',
-            host: process.env.DATABASE_HOST,
-            port: parseInt(process.env.DATABASE_PORT, 10) || 3306,
-            username: process.env.DATABASE_USER,
-            password: process.env.DATABASE_PASSWORD,
-            database: process.env.DATABASE_NAME,
-            entities: ["dist/entities/*.entity{.ts,.js}"],
-            synchronize: true,
-        }),
-    ],
 })
 
 export class AppModule {}

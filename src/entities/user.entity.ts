@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn} from 'typeorm';
 import {UserLoginHistory} from "./user.login.history";
 
 @Entity('users')
@@ -16,5 +16,6 @@ export class UserEntity {
     updatedDate: Date;
 
     @OneToMany(type => UserLoginHistory, userLoginEntity => userLoginEntity.user)
+    @JoinColumn({name: 'user_id'})
     loginHistories: UserLoginHistory[];
 }

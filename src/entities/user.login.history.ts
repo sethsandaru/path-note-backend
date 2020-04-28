@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne} from 'typeorm';
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn} from 'typeorm';
 import {UserEntity} from "./user.entity";
 
 @Entity('user_login_histories')
@@ -22,5 +22,6 @@ export class UserLoginHistory {
     loginDate: Date;
 
     @ManyToOne(type => UserEntity, user => user.loginHistories)
+    @JoinColumn({referencedColumnName: 'user_id'})
     user: UserEntity;
 }

@@ -5,5 +5,7 @@
   "username": "root",
   "password": "vertrigo",
   "database": "pathnote",
-  "entities": ["src/**/*.entity{.ts,.js}"],
+  "entities": [
+    "dist/entities/*.js"
+  ]
 }

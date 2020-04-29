@@ -22,6 +22,5 @@ export class UserLoginHistory {
     loginDate: Date;
 
     @ManyToOne(type => UserEntity, user => user.loginHistories)
-    @JoinColumn({referencedColumnName: 'user_id'})
     user: UserEntity;
 }

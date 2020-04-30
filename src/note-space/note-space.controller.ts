@@ -2,6 +2,7 @@ import {Body, Controller, HttpException, Post} from '@nestjs/common';
 import {NoteSpaceService} from "./note-space.service";
 import {CreateNoteSpaceDTO} from "../dto/create-note-space.dto";
 import {NoteSpaceEntity} from "../entities/note-space.entity";
+import {RetrieveApiResultDTO} from "../dto/retrieve-api-result.dto";
 
 @Controller('note-space')
 export class NoteSpaceController {
@@ -15,7 +16,7 @@ export class NoteSpaceController {
     @Post('/create')
     async createNoteSpace(
         @Body() createSpaceDto : CreateNoteSpaceDTO
-    ) : Promise<NoteSpaceEntity> {
+    ) : Promise<RetrieveApiResultDTO> {
         const validationStatus = await this.noteService.runValidateForCreation(createSpaceDto)
         if (!validationStatus) {
             throw new HttpException(
@@ -25,6 +26,14 @@ export class NoteSpaceController {
         }
 
         // start the request
-        return this.noteService.createNewWorkSpace(createSpaceDto)
+        const noteSpaceEntity = await this.noteService.createNewWorkSpace(createSpaceDto)
+        return new Promise(resolve => {
+            let resultObj = new RetrieveApiResultDTO()
+
+            resultObj.status = (noteSpaceEntity != null)
+            resultObj.object = noteSpaceEntity
+
+            resolve(resultObj)
+        })
     }
 }

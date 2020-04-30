@@ -2,7 +2,7 @@ import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn} from 'typ
 import {UserEntity} from "./user.entity";
 
 @Entity('user_login_histories')
-export class UserLoginHistory {
+export class UserLoginHistoryEntity {
     @PrimaryGeneratedColumn()
     id: number;
 

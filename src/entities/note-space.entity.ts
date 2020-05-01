@@ -65,14 +65,14 @@ export class NoteSpaceEntity extends BaseDateEntity{
     /**
      * Background Image (Uploaded by User)
      */
-    @Column({name: 'background_image_file_id', type: "integer"})
+    @Column({name: 'background_image_file_id', type: "integer", nullable: true, default: null})
     backgroundImageFileId: number;
 
     /**
      * Font-Size of the Note
      * @default 14px
      */
-    @Column({name: 'font_size', type: "integer"})
+    @Column({name: 'font_size', type: "integer", default: 13})
     fontSize: number;
 
     /****
@@ -83,6 +83,7 @@ export class NoteSpaceEntity extends BaseDateEntity{
      * 1 user - N NoteSpaces
      */
     @ManyToOne(type => UserEntity, user => user.noteSpaces)
+    @JoinColumn({name: 'user_id'})
     user: UserEntity;
 
     /**

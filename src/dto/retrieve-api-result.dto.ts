@@ -1,5 +1,5 @@
 
 export class RetrieveApiResultDTO {
     status: boolean;
-    object: object;
+    object: object = null;
 }

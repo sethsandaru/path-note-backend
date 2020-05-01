@@ -22,5 +22,6 @@ export class UserLoginHistoryEntity {
     loginDate: Date;
 
     @ManyToOne(type => UserEntity, user => user.loginHistories)
+    @JoinColumn({name: 'user_id'})
     user: UserEntity;
 }

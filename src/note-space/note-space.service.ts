@@ -1,18 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import {Dependencies, Injectable} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
-import {NoteSpaceEntity} from "../entities/note-space.entity";
-import {Repository} from "typeorm";
-import {CreateNoteSpaceDTO} from "../dto/create-note-space.dto";
-import {UsersService} from "../users/users.service";
-import {UserEntity} from "../entities/user.entity";
+import {NoteSpaceEntity} from "@entities/note-space.entity";
+import {getConnection, Repository} from "typeorm";
+import {CreateNoteSpaceDTO} from "@dto/create-note-space.dto";
+import {UsersService} from "@src/users/users.service";
+import {UserEntity} from "@entities/user.entity";
+import {HelperFactory} from "@src/helper.factory";
 
 @Injectable()
 export class NoteSpaceService {
     constructor(
         @InjectRepository(NoteSpaceEntity)
         private noteSpaceRepository : Repository<NoteSpaceEntity>,
-        private usersService : UsersService
-    ) {}
+        private readonly usersService : UsersService
+    ) {
+    }
 
     /**
      * Validate for Create-Request
@@ -41,17 +43,39 @@ export class NoteSpaceService {
      */
     async createNewWorkSpace(
         createDTO : CreateNoteSpaceDTO
-    ) : Promise<NoteSpaceEntity> {
-        // Create NoteSpace Entity First
-        let spaceEntity = NoteSpaceService.transformFromCreateNoteSpaceDTO(createDTO)
+    ) : Promise<NoteSpaceEntity|null> {
+        // Start Transaction indeed
+        const connection = getConnection()
+        const queryRunner = connection.createQueryRunner()
+        await queryRunner.startTransaction()
+        
+        try {
+            // Create Note-Space Entity
+            let spaceEntity = await this.transformFromCreateNoteSpaceDTO(createDTO)
 
-        // Mapping with User
-        let userEntity = this.usersService.createOrRetrieveUser(createDTO.email)
+            // Get User / Create new User
+            let userEntity = await this.usersService.createOrRetrieveUser(createDTO.email)
 
-        // TODO: Continue the function
+            // Set noteMapping
+            spaceEntity.userId = userEntity.id
 
-        // result...
-        return null;
+            // start to save
+            spaceEntity = await this.noteSpaceRepository.save(spaceEntity)
+
+            // Commit
+            await queryRunner.commitTransaction()
+
+            // return result
+            return new Promise(resolve => resolve(spaceEntity));
+        } catch (err) {
+            console.log(err)
+            await queryRunner.rollbackTransaction()
+        } finally {
+            await queryRunner.release()
+        }
+
+        // Failed result...
+        return new Promise(resolve => resolve(null))
     }
 
     /**
@@ -74,18 +98,46 @@ export class NoteSpaceService {
     }
 
     /**
+     * Generate UNIQUE NoteKey
+     * @param userEmail
+     */
+    async generateUniqueNoteKey(userEmail : string) : Promise<string> {
+        do {
+            let noteKey = HelperFactory.generateString(6)
+
+            // if exists => next
+            if (await this.isNoteKeyAvailable(noteKey, userEmail)) {
+                continue
+            }
+
+            // otherwise it done
+            return new Promise(resolve => resolve(noteKey))
+        } while (true)
+    }
+
+    /**
      * From Create Note Space DTO => Entity
      * @param dto
      */
-    private static transformFromCreateNoteSpaceDTO(
+    private async transformFromCreateNoteSpaceDTO(
         dto : CreateNoteSpaceDTO
-    ) : NoteSpaceEntity {
-        let newSpace = new NoteSpaceEntity();
+    ) : Promise<NoteSpaceEntity> {
+        let newSpace = new NoteSpaceEntity()
 
         // set data
-        newSpace.noteKey = dto.noteKey;
+        newSpace.noteKey = dto.noteKey || await this.generateUniqueNoteKey(dto.email)
+        newSpace.name = dto.name
+        newSpace.description = dto.description
+        newSpace.hasPassword = dto.hasPassword
+        newSpace.visitorCanEdit = dto.visitorCanEdit
+        newSpace.visitorCanView = dto.visitorCanView
 
-        return newSpace;
+        // some with logic
+        if (newSpace.hasPassword) {
+            newSpace.password = await HelperFactory.encryptPassword(dto.password)
+        }
+
+        return new Promise(resolve => resolve(newSpace))
     }
 
 }

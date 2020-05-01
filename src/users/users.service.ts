@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import {UserEntity} from "../entities/user.entity";
+import {UserEntity} from "@entities/user.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
-import {CreateNoteSpaceDTO} from "../dto/create-note-space.dto";
-import {NoteSpaceEntity} from "../entities/note-space.entity";
 
 @Injectable()
 export class UsersService {
@@ -37,7 +35,7 @@ export class UsersService {
         userEntity.email = email;
         userEntity.createdDate = new Date();
 
-        return this.usersRepository.create(userEntity)
+        return this.usersRepository.save(userEntity)
     }
 
     /**

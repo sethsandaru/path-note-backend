@@ -3,7 +3,7 @@ CREATE TABLE `note_spaces`(
     `user_id` INT(11) NOT NULL,
 
     # Note Default Detail
-    `noteKey` VARCHAR(50) NOT NULL,
+    `note_key` VARCHAR(50) NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255),
 
@@ -21,5 +21,6 @@ CREATE TABLE `note_spaces`(
     `updated_date` DATETIME,
 
     INDEX(`user_id`), # This index will help to retrieve notes of user faster.
+    INDEX(`note_key`), # This index will help to retrieve note by key faster.
     UNIQUE(`noteKey`, `user_id`) # This is a LOGIC, also quick retrieve too.
 );

@@ -1,4 +1,4 @@
-import {Dependencies, Injectable} from '@nestjs/common';
+import {BadRequestException, Injectable, UnprocessableEntityException} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {NoteSpaceEntity} from "@entities/note-space.entity";
 import {getConnection, Repository} from "typeorm";
@@ -6,6 +6,9 @@ import {CreateNoteSpaceDTO} from "@dto/create-note-space.dto";
 import {UsersService} from "@src/users/users.service";
 import {UserEntity} from "@entities/user.entity";
 import {HelperFactory} from "@src/helper.factory";
+import {Config} from "@src/configs";
+import {RetrieveApiResultDTO} from "@dto/retrieve-api-result.dto";
+import {NoteSpaceResultInterface} from "@interfaces/note-space/note-space-result.interface";
 
 @Injectable()
 export class NoteSpaceService {
@@ -27,7 +30,13 @@ export class NoteSpaceService {
 
         // we only check further unique here
         const isNoteExists = await this.isNoteKeyAvailable(createDTO.noteKey, createDTO.email)
-        return !isNoteExists;
+        if (isNoteExists) {
+            throw new BadRequestException(
+                Config.getLangText('noteSpace.errorMessages.duplicateNoteKey')
+            )
+        }
+
+        return new Promise(resolve => resolve(true));
     }
 
     /**
@@ -43,7 +52,7 @@ export class NoteSpaceService {
      */
     async createNewWorkSpace(
         createDTO : CreateNoteSpaceDTO
-    ) : Promise<NoteSpaceEntity|null> {
+    ) : Promise<RetrieveApiResultDTO> {
         // Start Transaction indeed
         const connection = getConnection()
         const queryRunner = connection.createQueryRunner()
@@ -65,17 +74,24 @@ export class NoteSpaceService {
             // Commit
             await queryRunner.commitTransaction()
 
-            // return result
-            return new Promise(resolve => resolve(spaceEntity));
+            // Pack up result then return
+            return new Promise(resolve => resolve(new RetrieveApiResultDTO(
+                true,
+                {
+                    id: spaceEntity.id,
+                    noteKey: spaceEntity.noteKey
+                }
+            )))
         } catch (err) {
-            console.log(err)
             await queryRunner.rollbackTransaction()
         } finally {
             await queryRunner.release()
         }
 
         // Failed result...
-        return new Promise(resolve => resolve(null))
+        throw new UnprocessableEntityException(
+            Config.getLangText('noteSpace.errorMessages.noteSpaceCreateFailed')
+        )
     }
 
     /**

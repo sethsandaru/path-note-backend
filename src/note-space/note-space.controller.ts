@@ -18,32 +18,11 @@ export class NoteSpaceController {
     async createNoteSpace(
         @Body() createSpaceDto : CreateNoteSpaceDTO
     ) : Promise<RetrieveApiResultDTO> {
-        const validationStatus = await this.noteService.runValidateForCreation(createSpaceDto)
-        if (!validationStatus) {
-            throw new BadRequestException("Note-Key is already taken. Please choose another one.")
-        }
+        // Validation-Second-time
+        await this.noteService.runValidateForCreation(createSpaceDto)
 
-        // Business-Handling...
-        const noteSpaceEntity = await this.noteService.createNewWorkSpace(createSpaceDto)
-        if (!noteSpaceEntity) {
-            throw new UnprocessableEntityException("Failed to create new Note-Space. Please try again.")
-        }
-
-        // Return successfully result
-        return new Promise(resolve => {
-            let resultObj = new RetrieveApiResultDTO()
-
-            resultObj.status = (noteSpaceEntity != null)
-            if (resultObj.status) {
-                let nsObj : NoteSpaceResultInterface = {
-                    id: noteSpaceEntity.id,
-                    noteKey: noteSpaceEntity.noteKey
-                }
-
-                resultObj.object = nsObj
-            }
-
-            resolve(resultObj)
-        })
+        // Business-Handle and Return Result
+        // If it got some problem => exception will be fired
+        return this.noteService.createNewWorkSpace(createSpaceDto)
     }
 }

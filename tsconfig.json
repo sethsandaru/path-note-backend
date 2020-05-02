@@ -14,7 +14,8 @@
       "@src/*": ["src/*"],
       "@entities/*": ["src/entities/*"],
       "@dto/*": ["src/dto/*"],
-      "@interfaces/*": ["src/interfaces/*"]
+      "@interfaces/*": ["src/interfaces/*"],
+      "@configs/*": ["src/configs/*"]
     }
   },
   "exclude": ["node_modules", "dist"]

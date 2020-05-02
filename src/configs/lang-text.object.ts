@@ -12,7 +12,8 @@ export default {
         // Note-Space Mess
         errorMessages: {
             duplicateNoteKey: "Note-Key is already taken. Please choose another one.",
-            noteSpaceCreateFailed: "Failed to create new Note-Space. Please try again."
+            noteSpaceCreateFailed: "Failed to create new Note-Space. Please try again.",
+            noteSpaceNotExists: "This Note-Space doesn't exist. Exiting...",
         }
     }
 

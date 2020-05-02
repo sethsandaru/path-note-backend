@@ -8,6 +8,7 @@ import {UserEntity} from "@entities/user.entity";
 import {HelperFactory} from "@src/helper.factory";
 import {Config} from "@src/configs";
 import {RetrieveApiResultDTO} from "@dto/retrieve-api-result.dto";
+import {NoteSpacePermissionResultInterface} from "@interfaces/note-space/note-space-permission-result.interface";
 
 @Injectable()
 export class NoteSpaceService {
@@ -24,7 +25,7 @@ export class NoteSpaceService {
      * Validate for Create-Request
      * @param createDTO
      */
-    async runValidateForCreation(createDTO : CreateNoteSpaceDTO) : Promise<boolean> {
+    private async runValidateForCreation(createDTO : CreateNoteSpaceDTO) : Promise<boolean> {
         if (!createDTO.noteKey) {
             return new Promise(resolve => resolve(true));
         }
@@ -49,11 +50,27 @@ export class NoteSpaceService {
     }
 
     /**
+     * Database Retrieve by Note-Key
+     * @description Where on Note-Key (INDEX)
+     * @param noteKey
+     */
+    async getByNoteKey(noteKey : string) : Promise<NoteSpaceEntity>  {
+        return this.noteSpaceRepository.findOne({
+            where: {
+                noteKey: noteKey
+            }
+        })
+    }
+
+    /**
      * [WorkFlow] Create new Work Space Handler...
      */
     async createNewWorkSpace(
         createDTO : CreateNoteSpaceDTO
     ) : Promise<RetrieveApiResultDTO> {
+        // Run validation (noteKey uniqueChecking...)
+        await this.runValidateForCreation(createDTO)
+
         // Start Transaction indeed
         const connection = getConnection()
         const queryRunner = connection.createQueryRunner()
@@ -155,5 +172,36 @@ export class NoteSpaceService {
         }
 
         return new Promise(resolve => resolve(newSpace))
+    }
+
+    /**
+     * Check if visitor have access to the note
+     * @param noteKey
+     */
+    async checkNoteSpacePermission(noteKey : string ) : Promise<any> {
+        // get note info
+        const noteSpaceEntity = await this.getByNoteKey(noteKey)
+        if (!noteSpaceEntity) {
+            throw new BadRequestException(
+                Config.getLangText('noteSpace.errorMessages.noteSpaceNotExists')
+            )
+        }
+
+        // pick up some basic data for permission
+        let resultDataObject : NoteSpacePermissionResultInterface = {
+            id: noteSpaceEntity.id,
+            noteKey: noteSpaceEntity.noteKey,
+            name: noteSpaceEntity.name,
+            hasPassword: noteSpaceEntity.password != null,
+            visitorCanEdit: noteSpaceEntity.visitorCanEdit,
+            visitorCanView: noteSpaceEntity.visitorCanView
+        }
+
+        // return result to client
+        return new Promise(resolve =>
+            resolve(
+                new RetrieveApiResultDTO(true, resultDataObject)
+            )
+        )
     }
 }

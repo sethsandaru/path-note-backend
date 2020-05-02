@@ -25,9 +25,6 @@ export class NoteSpaceController {
     async createNoteSpace(
         @Body() createSpaceDto : CreateNoteSpaceDTO
     ) : Promise<RetrieveApiResultDTO> {
-        // Validation-Second-time
-        await this.noteService.runValidateForCreation(createSpaceDto)
-
         // Business-Handle and Return Result
         // If it got some problem => exception will be fired
         return this.noteService.createNewWorkSpace(createSpaceDto)
@@ -39,9 +36,9 @@ export class NoteSpaceController {
      */
     @Get('/availability/:noteKey')
     @HttpCode(200)
-    getNoteSpaceAvailability(
+    async getNoteSpaceAvailability(
         @Param('noteKey') noteKey : string
-    ) : string {
-        return ""
+    ) : Promise<any> { // TODO: Reupdate type here
+        return this.noteService.checkNoteSpacePermission(noteKey)
     }
 }

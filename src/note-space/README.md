@@ -44,9 +44,31 @@ RestPath: `/note-space`
 ```
 
 ### [GET] /note-space/availability/{noteKey}
-- Desc: This API will help us to check if user can access the Note or not
+- Desc: This API will help us to get some very basic information to check the permission of the visitor.
 - URL: `/note-space/availability/{noteKey}`
 - Content-Type & Accept-Type: `application/json`
+- Result-Success:
+```json
+{
+    "object": {
+        "id": 6,
+        "noteKey": "tqozfv",
+        "name": "Dangerous Zombie",
+        "hasPassword": false,
+        "visitorCanEdit": false,
+        "visitorCanView": true
+    },
+    "status": true
+}
+```
+- Result-Failed/Error:
+```json
+{
+    "statusCode": 400,
+    "message": "This Note-Space doesn't exist. Exiting...",
+    "error": "Bad Request"
+}
+```
 
 ### [POST] /note-space/login
 - Desc: This API will check the Note's access password. Only available for Note with password.

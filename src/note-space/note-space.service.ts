@@ -8,16 +8,17 @@ import {UserEntity} from "@entities/user.entity";
 import {HelperFactory} from "@src/helper.factory";
 import {Config} from "@src/configs";
 import {RetrieveApiResultDTO} from "@dto/retrieve-api-result.dto";
-import {NoteSpaceResultInterface} from "@interfaces/note-space/note-space-result.interface";
 
 @Injectable()
 export class NoteSpaceService {
     constructor(
+        // repo DI
         @InjectRepository(NoteSpaceEntity)
         private noteSpaceRepository : Repository<NoteSpaceEntity>,
+
+        // service(s) DI
         private readonly usersService : UsersService
-    ) {
-    }
+    ) {}
 
     /**
      * Validate for Create-Request
@@ -44,7 +45,7 @@ export class NoteSpaceService {
      * @param entity
      */
     async createFromEntity(entity: NoteSpaceEntity) : Promise<NoteSpaceEntity> {
-        return this.noteSpaceRepository.create(entity)
+        return this.noteSpaceRepository.save(entity)
     }
 
     /**
@@ -69,7 +70,7 @@ export class NoteSpaceService {
             spaceEntity.userId = userEntity.id
 
             // start to save
-            spaceEntity = await this.noteSpaceRepository.save(spaceEntity)
+            spaceEntity = await this.createFromEntity(spaceEntity)
 
             // Commit
             await queryRunner.commitTransaction()
@@ -132,8 +133,8 @@ export class NoteSpaceService {
     }
 
     /**
-     * From Create Note Space DTO => Entity
-     * @param dto
+     * Create-Note-DTO Transform into NoteSpaceEntity
+     * @returns NoteSpaceEntity
      */
     private async transformFromCreateNoteSpaceDTO(
         dto : CreateNoteSpaceDTO
@@ -155,5 +156,4 @@ export class NoteSpaceService {
 
         return new Promise(resolve => resolve(newSpace))
     }
-
 }

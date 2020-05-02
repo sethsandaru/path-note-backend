@@ -1,8 +1,14 @@
-import {BadRequestException, Body, Controller, HttpCode, Post, UnprocessableEntityException} from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    Param,
+    Post
+} from '@nestjs/common';
 import {NoteSpaceService} from "./note-space.service";
 import {CreateNoteSpaceDTO} from "@dto/create-note-space.dto";
 import {RetrieveApiResultDTO} from "@dto/retrieve-api-result.dto";
-import {NoteSpaceResultInterface} from "@interfaces/note-space/note-space-result.interface";
 
 @Controller('note-space')
 export class NoteSpaceController {
@@ -12,6 +18,7 @@ export class NoteSpaceController {
 
     /**
      * This method will create a new note space for the user
+     * [POST] only
      */
     @Post('/create')
     @HttpCode(200)
@@ -24,5 +31,17 @@ export class NoteSpaceController {
         // Business-Handle and Return Result
         // If it got some problem => exception will be fired
         return this.noteService.createNewWorkSpace(createSpaceDto)
+    }
+
+    /**
+     * This method will check the availabilty - also the permission of the user in order to continue
+     * [GET]
+     */
+    @Get('/availability/:noteKey')
+    @HttpCode(200)
+    getNoteSpaceAvailability(
+        @Param('noteKey') noteKey : string
+    ) : string {
+        return ""
     }
 }

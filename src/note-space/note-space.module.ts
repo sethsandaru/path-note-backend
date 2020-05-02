@@ -10,7 +10,9 @@ import {UsersModule} from "@src/users/users.module";
         TypeOrmModule.forFeature([NoteSpaceEntity]),
         UsersModule
     ],
-    providers: [NoteSpaceService],
+    providers: [
+        NoteSpaceService,
+    ],
     controllers: [NoteSpaceController]
 })
 export class NoteSpaceModule {}

@@ -12,6 +12,12 @@ async function bootstrap() {
     // register validation
     app.useGlobalPipes(new ValidationPipe());
 
+    // CORs Security
+    app.enableCors({
+        methods: ['GET', 'PUT', 'POST', 'DELETE'],
+        origin: ['http://localhost:8080']
+    })
+
     await app.listen(process.env.APPLICATION_PORT);
 
     // Some logger

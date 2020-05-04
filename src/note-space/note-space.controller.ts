@@ -9,6 +9,7 @@ import {
 import {NoteSpaceService} from "./note-space.service";
 import {CreateNoteSpaceDTO} from "@dto/create-note-space.dto";
 import {RetrieveApiResultDTO} from "@dto/retrieve-api-result.dto";
+import {NoteSpacePasswordDTO} from "@dto/note-space-password.dto";
 
 @Controller('note-space')
 export class NoteSpaceController {
@@ -38,7 +39,20 @@ export class NoteSpaceController {
     @HttpCode(200)
     async getNoteSpaceAvailability(
         @Param('noteKey') noteKey : string
-    ) : Promise<any> { // TODO: Reupdate type here
+    ) : Promise<RetrieveApiResultDTO> {
         return this.noteService.checkNoteSpacePermission(noteKey)
+    }
+
+    /**
+     * Verify Password of Note-Space
+     * [POST]
+     * @param passwordData
+     */
+    @Post('/verify-password')
+    @HttpCode(200)
+    async verifyNoteSpacePassword(
+        @Body() passwordData : NoteSpacePasswordDTO
+    ) : Promise<RetrieveApiResultDTO> {
+        return this.noteService.verifyNoteSpacePassword(passwordData)
     }
 }

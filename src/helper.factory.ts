@@ -45,7 +45,7 @@ export class HelperFactory {
 
         return new Promise(
             (resolve) => bcrypt.compare(
-                rawPassword, encryptedPassword, result => resolve(result)
+                rawPassword, encryptedPassword, (err, result) => resolve(result)
             )
         )
     }

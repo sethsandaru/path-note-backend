@@ -9,6 +9,7 @@ import {HelperFactory} from "@src/helper.factory";
 import {Config} from "@src/configs";
 import {RetrieveApiResultDTO} from "@dto/retrieve-api-result.dto";
 import {NoteSpacePermissionResultInterface} from "@interfaces/note-space/note-space-permission-result.interface";
+import {NoteSpacePasswordDTO} from "@dto/note-space-password.dto";
 
 @Injectable()
 export class NoteSpaceService {
@@ -178,7 +179,7 @@ export class NoteSpaceService {
      * Check if visitor have access to the note
      * @param noteKey
      */
-    async checkNoteSpacePermission(noteKey : string ) : Promise<any> {
+    async checkNoteSpacePermission(noteKey : string ) : Promise<RetrieveApiResultDTO> {
         // get note info
         const noteSpaceEntity = await this.getByNoteKey(noteKey)
         if (!noteSpaceEntity) {
@@ -201,6 +202,29 @@ export class NoteSpaceService {
         return new Promise(resolve =>
             resolve(
                 new RetrieveApiResultDTO(true, resultDataObject)
+            )
+        )
+    }
+
+    /**
+     * Verify Password In order to access Note-Space
+     * @param passwordDTO
+     */
+    async verifyNoteSpacePassword(passwordDTO : NoteSpacePasswordDTO) : Promise<RetrieveApiResultDTO> {
+        // retrieve note space first
+        const noteSpaceItem = await this.getByNoteKey(passwordDTO.noteKey)
+        if (!noteSpaceItem) {
+            throw new BadRequestException(
+                Config.getLangText('noteSpace.errorMessages.noteSpaceNotExists')
+            )
+        }
+
+        // check password and return data here
+        let passwordStatus = await HelperFactory.comparePassword(passwordDTO.password, noteSpaceItem.password)
+
+        return new Promise(resolve =>
+            resolve(
+                new RetrieveApiResultDTO(passwordStatus)
             )
         )
     }

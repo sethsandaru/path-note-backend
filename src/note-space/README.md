@@ -70,10 +70,32 @@ RestPath: `/note-space`
 }
 ```
 
-### [POST] /note-space/login
-- Desc: This API will check the Note's access password. Only available for Note with password.
+### [POST] /note-space/verify-password
+- Desc: This API will check the Note Space's access password. Only available for Note with password.
 - URL: `/note-space/login`
 - Content-Type & Accept-Type: `application/json`
+- Body-Data:
+```json 
+{
+    "noteKey": "xxx",
+    "password: "abcxyz"
+}
+```
+- Result-Success (HTTP Code 200) - Boolean on verification:
+```json
+{
+    "status": true,
+    "object": null
+}
+```
+- Result-Failed (HTTP Code 400):
+```json
+{
+    "statusCode": 400,
+    "message": "This Note-Space doesn't exist. Exiting...",
+    "error": "Bad Request"
+}
+```
 
 ### [GET] /note-space/get (*)
 - Desc: This API will check the Note's access password. Only available for Note with password.

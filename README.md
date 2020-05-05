@@ -7,7 +7,6 @@ the APIs. I'm always doing my best to make it reusable.
 
 ## Technologies
 - TypeScript
-- NodeJS
     - NestJS Framework
 - Database:
     - MySQL/MariaDB

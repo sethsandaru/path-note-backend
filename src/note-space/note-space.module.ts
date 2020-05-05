@@ -4,11 +4,13 @@ import { NoteSpaceController } from './note-space.controller';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {NoteSpaceEntity} from "@entities/note-space.entity";
 import {UsersModule} from "@src/users/users.module";
+import {NoteSpaceAccessModule} from "@src/note-space-access/note-space-access.module";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([NoteSpaceEntity]),
-        UsersModule
+        UsersModule,
+        NoteSpaceAccessModule
     ],
     providers: [
         NoteSpaceService,

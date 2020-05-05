@@ -10,6 +10,7 @@ import {Config} from "@src/configs";
 import {RetrieveApiResultDTO} from "@dto/retrieve-api-result.dto";
 import {NoteSpacePermissionResultInterface} from "@interfaces/note-space/note-space-permission-result.interface";
 import {NoteSpacePasswordDTO} from "@dto/note-space-password.dto";
+import {NoteSpaceAccessService} from "@src/note-space-access/note-space-access.service";
 
 @Injectable()
 export class NoteSpaceService {
@@ -19,7 +20,8 @@ export class NoteSpaceService {
         private noteSpaceRepository : Repository<NoteSpaceEntity>,
 
         // service(s) DI
-        private readonly usersService : UsersService
+        private readonly usersService : UsersService,
+        private readonly noteSpaceAccessService : NoteSpaceAccessService
     ) {}
 
     /**
@@ -221,6 +223,8 @@ export class NoteSpaceService {
 
         // check password and return data here
         let passwordStatus = await HelperFactory.comparePassword(passwordDTO.password, noteSpaceItem.password)
+
+        // we have to generate a new API-key to use in order to access the note.
 
         return new Promise(resolve =>
             resolve(

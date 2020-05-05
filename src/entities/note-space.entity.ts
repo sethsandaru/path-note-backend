@@ -3,6 +3,7 @@ import {BaseDateEntity} from "./types/base-date.entity";
 import {UserEntity} from "./user.entity";
 import {NoteItemEntity} from "./note-item.entity";
 import {CreateNoteSpaceDTO} from "../dto/create-note-space.dto";
+import {NoteSpaceAccessEntity} from "@entities/note-space-access.entity";
 
 @Entity('note_spaces')
 @Index(["userId", "noteKey"], { unique: true })
@@ -89,9 +90,14 @@ export class NoteSpaceEntity extends BaseDateEntity{
     /**
      * 1 NoteSpace - N Items
      */
-    @OneToMany(type => NoteItemEntity, item => item)
+    @OneToMany(type => NoteItemEntity, item => item.noteSpace)
     noteItems: NoteItemEntity[];
 
+    /**
+     * 1 NoteSpace - N Accesses
+     */
+    @OneToMany(type => NoteSpaceAccessEntity, item => item.noteSpace)
+    noteAccesses: NoteSpaceAccessEntity[];
 
     /****
      * ACCESSOR METHODS

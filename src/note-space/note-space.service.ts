@@ -66,6 +66,19 @@ export class NoteSpaceService {
     }
 
     /**
+     * Database Retrieve by Note-Space-ID
+     * @description Where on ID (PRIMARy)
+     * @param noteSpaceId
+     */
+    async getById(noteSpaceId : number) : Promise<NoteSpaceEntity>  {
+        return this.noteSpaceRepository.findOne({
+            where: {
+                id: noteSpaceId
+            }
+        })
+    }
+
+    /**
      * [WorkFlow] Create new Work Space Handler...
      */
     async createNewWorkSpace(
@@ -231,5 +244,14 @@ export class NoteSpaceService {
                 new RetrieveApiResultDTO(passwordStatus)
             )
         )
+    }
+
+    /**
+     * Check if the note-space has password or not
+     * @param noteSpaceId
+     */
+    async isNoteSpaceHasPassword(noteSpaceId : number) : Promise<boolean> {
+        const noteSpaceEntity = await this.getById(noteSpaceId)
+        return new Promise(resolve => resolve(noteSpaceEntity.hasPassword))
     }
 }

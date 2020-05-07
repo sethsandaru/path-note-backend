@@ -7,6 +7,11 @@ CREATE TABLE `note_items`(
     `content` VARCHAR(255) NOT NULL,
     `is_rich_content` TINYINT(1) DEFAULT 0,
 
+    # Note Styling
+    `color` TINYINT(1) DEFAULT 0,
+    `top` INT(5) DEFAULT 0,
+    `right` INT(5) DEFAULT 0,
+
     `created_date` DATETIME DEFAULT NOW(),
     `updated_date` DATETIME,
 

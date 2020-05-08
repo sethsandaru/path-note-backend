@@ -25,6 +25,15 @@ export class NoteItemEntity extends BaseDateEntity {
     @Column('boolean', {name: "is_rich_content", default: false})
     isRichContent: boolean;
 
+    @Column("integer")
+    color: number;
+
+    @Column("integer")
+    top: number;
+
+    @Column("integer")
+    right: number;
+
     /****
      * RELATIONSHIPS
      ****/

@@ -1,10 +1,9 @@
 import {BaseDateEntity} from "./types/base-date.entity";
 import {Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {NoteSpaceEntity} from "./note-space.entity";
-import {UpdatedUserTypeEnum} from "./enums/updated-user-type.enum";
 
 @Entity('note_items')
-@Index('noteSpaceId')
+@Index('note_space_id')
 export class NoteItemEntity extends BaseDateEntity {
     /****
      * FIELDS
@@ -13,7 +12,10 @@ export class NoteItemEntity extends BaseDateEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column("integer", {name: "note_space_id"})
+    @Column({
+        name: "note_space_id",
+        type: "integer",
+    })
     noteSpaceId: number;
 
     @Column('varchar', {length: 255})
@@ -32,7 +34,10 @@ export class NoteItemEntity extends BaseDateEntity {
     top: number;
 
     @Column("integer")
-    right: number;
+    left: number;
+
+    @Column({name: "deleted_date", type: "datetime", default: null})
+    deletedDate: Date;
 
     /****
      * RELATIONSHIPS

@@ -16,6 +16,6 @@ export class NoteItemsController {
     async getFromNoteSpaceId(
         @Param('noteSpaceId') noteSpaceId : number
     ) : Promise<NoteItemEntity[]> {
-        return this.service.getFromNoteSpaceId(noteSpaceId);
+        return this.service.getFromNoteSpaceId(noteSpaceId)
     }
 }

@@ -208,6 +208,7 @@ export class NoteSpaceService {
             id: noteSpaceEntity.id,
             noteKey: noteSpaceEntity.noteKey,
             name: noteSpaceEntity.name,
+            description: noteSpaceEntity.description,
             hasPassword: noteSpaceEntity.password != null,
             visitorCanEdit: noteSpaceEntity.visitorCanEdit,
             visitorCanView: noteSpaceEntity.visitorCanView

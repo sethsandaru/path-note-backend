@@ -10,10 +10,11 @@ CREATE TABLE `note_items`(
     # Note Styling
     `color` TINYINT(1) DEFAULT 0,
     `top` INT(5) DEFAULT 0,
-    `right` INT(5) DEFAULT 0,
+    `left` INT(5) DEFAULT 0,
 
     `created_date` DATETIME DEFAULT NOW(),
-    `updated_date` DATETIME,
+    `updated_date` DATETIME DEFAULT NULL,
+    `deleted_date` DATETIME DEFAULT NULL,
 
     INDEX(`note_space_id`) # This index will help to retrieve notes of user faster.
 );

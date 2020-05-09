@@ -22,9 +22,22 @@ export class NoteItemsService {
         // if (this.noteSpaceService.isNoteHasPassword(noteSpaceId)) {...}
 
         return this.repository.find({
+            select: [
+                "id",
+                "headline",
+                "content",
+                "isRichContent",
+                "top",
+                "left",
+                "createdDate",
+                "updatedDate",
+                "color"
+            ],
             where: {
-                noteSpaceId: noteSpaceId
-            }
+                noteSpaceId: noteSpaceId,
+                deletedDate: null
+            },
+            relations: null
         });
     }
 }

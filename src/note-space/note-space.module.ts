@@ -15,6 +15,9 @@ import {NoteSpaceAccessModule} from "@src/note-space-access/note-space-access.mo
     providers: [
         NoteSpaceService,
     ],
-    controllers: [NoteSpaceController]
+    controllers: [NoteSpaceController],
+    exports: [
+        NoteSpaceService
+    ]
 })
 export class NoteSpaceModule {}

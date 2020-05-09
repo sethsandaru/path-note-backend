@@ -36,6 +36,12 @@ export class NoteItemEntity extends BaseDateEntity {
     @Column("integer")
     left: number;
 
+    @Column("integer")
+    width: number;
+
+    @Column("integer")
+    height: number;
+
     @Column({name: "deleted_date", type: "datetime", default: null})
     deletedDate: Date;
 

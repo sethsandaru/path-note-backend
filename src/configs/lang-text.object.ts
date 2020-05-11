@@ -15,6 +15,15 @@ export default {
             noteSpaceCreateFailed: "Failed to create new Note-Space. Please try again.",
             noteSpaceNotExists: "This Note-Space doesn't exist. Exiting...",
         }
+    },
+
+    /**
+     * Note-Item Module Text
+     */
+    noteItem: {
+        errorMessages: {
+            notExists: "Note-Item doesn't exists. Aborted."
+        }
     }
 
 }

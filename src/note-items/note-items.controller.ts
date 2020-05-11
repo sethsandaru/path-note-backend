@@ -1,6 +1,8 @@
 import {Body, Controller, Delete, Get, HttpCode, Param, Post, Put} from '@nestjs/common';
 import {NoteItemsService} from "@src/note-items/note-items.service";
 import {NoteItemEntity} from "@entities/note-item.entity";
+import {UpdateNoteItemDTO} from "@dto/update-note-item.dto";
+import {UpdateItemResultInterface} from "@interfaces/note-items/update-item-result.interface";
 
 @Controller('note-items')
 export class NoteItemsController {
@@ -28,11 +30,12 @@ export class NoteItemsController {
     }
 
     @Put('/update/:noteItemId')
+    @HttpCode(200)
     async updateNoteItem(
         @Param('noteItemId') noteItemId : number,
-        @Body() hello : string // TODO: Switch to DTO
-    ) {
-
+        @Body() updateDTO : UpdateNoteItemDTO
+    ) : Promise<UpdateItemResultInterface> {
+        return this.service.updateNoteItem(noteItemId, updateDTO)
     }
 
     @Delete('/update/:noteItemId')

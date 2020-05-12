@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { NoteSpaceModule } from './note-space/note-space.module';
 import { NoteItemsModule } from './note-items/note-items.module';
 import { NoteSpaceAccessModule } from './note-space-access/note-space-access.module';
+import { NoteItemsGateway } from './gateways/note-items.gateway';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { NoteSpaceAccessModule } from './note-space-access/note-space-access.mod
       NoteSpaceAccessModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, NoteItemsGateway],
 })
 
 export class AppModule {}

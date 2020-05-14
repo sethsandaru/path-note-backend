@@ -18,9 +18,14 @@ export class NoteItemsGateway {
         //     .emit('users-changed', {user: user.nickname, event: 'joined'});
     }
 
+    @SubscribeMessage('create-note-item')
+    async createNoteItem(client: Socket, payload : UpdateNoteItemDTO)  {
+        client.server.emit('note-item-added');
+    }
+
     @SubscribeMessage('update-note-item')
-    async handleMessage(client: Socket, payload : UpdateNoteItemDTO)  {
+    async updateNoteItem(client: Socket, payload : UpdateNoteItemDTO)  {
         await this.noteItemsService.updateNoteItem(1, payload) // TODO: FInish Function
-        client.server.emit('note-updated');
+        client.server.emit('note-item-updated');
     }
 }

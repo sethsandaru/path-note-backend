@@ -63,10 +63,10 @@ export class NoteItemsService {
      * @param {UpdateNoteItemDTO} updateNoteItemDTO
      */
     async updateNoteItem(
-        noteItemId : number,
-        updateNoteItemDTO : UpdateNoteItemDTO
+        updateNoteItemDTO : UpdateNoteItemDTO,
+        noteItemId : number = null
     ) : Promise<UpdateItemResultInterface> {
-        const noteItem = await this.getById(noteItemId)
+        const noteItem = await this.getById(noteItemId ?? updateNoteItemDTO.id)
         if (!noteItem) {
             throw new BadRequestException(
                 Config.getLangText('noteItem.errorMessages.notExists')

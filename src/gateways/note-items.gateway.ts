@@ -14,8 +14,8 @@ export class NoteItemsGateway {
         // check permission
 
         // back data
-        // client.join(data.roomId).broadcast.to(data.roomId)
-        //     .emit('users-changed', {user: user.nickname, event: 'joined'});
+        client.join(data.noteSpaceId).broadcast.to(data.noteSpaceId).
+            emit('note-space-joined', {event: 'joined'});
     }
 
     @SubscribeMessage('create-note-item')
@@ -25,7 +25,7 @@ export class NoteItemsGateway {
 
     @SubscribeMessage('update-note-item')
     async updateNoteItem(client: Socket, payload : UpdateNoteItemDTO)  {
-        await this.noteItemsService.updateNoteItem(1, payload) // TODO: FInish Function
+        await this.noteItemsService.updateNoteItem(payload)
         client.server.emit('note-item-updated');
     }
 }

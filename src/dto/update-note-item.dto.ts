@@ -1,5 +1,8 @@
 
 export class UpdateNoteItemDTO {
+    // id?
+    id?: number
+
     // note-content
     headline?: string
     content?: string

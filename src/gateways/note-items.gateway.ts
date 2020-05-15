@@ -14,8 +14,10 @@ export class NoteItemsGateway {
         // check permission
 
         // back data
-        client.join(data.noteSpaceId).broadcast.to(data.noteSpaceId).
-            emit('note-space-joined', {event: 'joined'});
+        client.join(data.noteSpaceId)
+            .broadcast
+            .to(data.noteSpaceId)
+            .emit('noteSpaceJoined', {event: 'joined'});
     }
 
     @SubscribeMessage('create-note-item')

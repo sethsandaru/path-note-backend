@@ -23,7 +23,10 @@ export default {
     noteItem: {
         errorMessages: {
             notExists: "Note-Item doesn't exists. Aborted."
-        }
+        },
+
+        defaultHeadline: "Headline goes here - double click to change",
+        defaultContent: "Body goes here - double click to change",
     }
 
 }

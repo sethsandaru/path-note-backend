@@ -3,8 +3,8 @@ CREATE TABLE `note_items`(
     `note_space_id` INT(11) NOT NULL,
 
     # Note Item Detail
-    `headline` VARCHAR(50) NOT NULL,
-    `content` VARCHAR(255) NOT NULL,
+    `headline` VARCHAR(50) DEFAULT NULL,
+    `content` VARCHAR(255) DEFAULT NULL,
     `is_rich_content` TINYINT(1) DEFAULT 0,
 
     # Note Styling

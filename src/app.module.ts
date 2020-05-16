@@ -6,8 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { NoteSpaceModule } from './note-space/note-space.module';
 import { NoteItemsModule } from './note-items/note-items.module';
-import { NoteSpaceAccessModule } from './note-space-access/note-space-access.module';
-import { NoteItemsGateway } from './gateways/note-items.gateway';
+import { NoteSpaceAccessModule } from './note-space-access/note-space-access.module'
 
 @Module({
   imports: [
@@ -18,10 +17,10 @@ import { NoteItemsGateway } from './gateways/note-items.gateway';
       TypeOrmModule.forRoot(),
       NoteSpaceModule,
       NoteItemsModule,
-      NoteSpaceAccessModule,
+      NoteSpaceAccessModule
   ],
   controllers: [AppController],
-  providers: [AppService, NoteItemsGateway],
+  providers: [AppService],
 })
 
 export class AppModule {}

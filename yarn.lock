@@ -575,6 +575,14 @@
     multer "1.4.2"
     tslib "1.11.1"
 
+"@nestjs/platform-socket.io@^7.0.13":
+  version "7.0.13"
+  resolved "https://registry.yarnpkg.com/@nestjs/platform-socket.io/-/platform-socket.io-7.0.13.tgz#79d53e8b7927185d854dbce5e2c4df490421d5b5"
+  integrity sha512-nmEP4UlGN3WQrit+UKqx3k3ee8r/QrX/Ii8xPFAq2FUJalInDaCcvQ7+E1bhtbyWZebSvllD8nDCYKii7BXVdQ==
+  dependencies:
+    socket.io "2.3.0"
+    tslib "1.11.2"
+
 "@nestjs/schematics@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@nestjs/schematics/-/schematics-7.0.0.tgz#7b48bdcd50dad430957b2c112d555a5147c2e60e"
@@ -799,6 +807,13 @@
   dependencies:
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
+
+"@types/socket.io@^2.1.5":
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/@types/socket.io/-/socket.io-2.1.5.tgz#3d792b1cc15b84c7aa079f28ee4aa2bec2ed7fbf"
+  integrity sha512-1eItGHI9nI8FMXPZNXdr5QP95Gr/CSQqVQ0ZyBhd4SMbLMFuB7cIbmyl66t85mvx9WAvhl1vbPA+cuwv3j9W4g==
+  dependencies:
+    "@types/node" "*"
 
 "@types/source-list-map@*":
   version "0.1.2"
@@ -6443,7 +6458,7 @@ socket.io-parser@~3.4.0:
     debug "~4.1.0"
     isarray "2.0.1"
 
-socket.io@^2.3.0:
+socket.io@2.3.0, socket.io@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/socket.io/-/socket.io-2.3.0.tgz#cd762ed6a4faeca59bc1f3e243c0969311eb73fb"
   integrity sha512-2A892lrj0GcgR/9Qk81EaY2gYhCBxurV0PfmmESO6p27QPrUK1J3zdns+5QPqvUYK2q657nSj0guoIil9+7eFg==

@@ -24,8 +24,21 @@ export class NoteItemsService {
     async getById(noteItemId : number) : Promise<NoteItemEntity | undefined> {
         return this.repository.findOne({
             where: {
-                id: noteItemId
-            }
+                id: noteItemId,
+            },
+            select: [
+                "id",
+                "headline",
+                "content",
+                "isRichContent",
+                "top",
+                "left",
+                "width",
+                "height",
+                "updatedDate",
+                "color"
+            ],
+            relations: []
         })
     }
 
@@ -39,11 +52,14 @@ export class NoteItemsService {
         return this.repository.find({
             select: [
                 "id",
+                "noteSpaceId",
                 "headline",
                 "content",
                 "isRichContent",
                 "top",
                 "left",
+                "width",
+                "height",
                 "createdDate",
                 "updatedDate",
                 "color"
@@ -54,6 +70,23 @@ export class NoteItemsService {
             },
             relations: null
         });
+    }
+
+    /**
+     * Add new Blank Note Item from NoteSpaceID
+     */
+    async addNewBlankNoteItem(
+        noteSpaceId : number
+    ) : Promise<NoteItemEntity> {
+        const item = new NoteItemEntity();
+        item.noteSpaceId = noteSpaceId
+
+        // DEFAULT DATA
+        item.headline = Config.getLangText('noteItem.defaultHeadline')
+        item.content = Config.getLangText('noteItem.defaultContent')
+
+        await this.repository.save(item)
+        return this.getById(item.id)
     }
 
     /**
@@ -74,38 +107,19 @@ export class NoteItemsService {
         }
 
         // update which??
-        if (updateNoteItemDTO.headline) {
-            noteItem.headline = updateNoteItemDTO.headline
-        }
-
-        if (updateNoteItemDTO.content) {
-            noteItem.content = updateNoteItemDTO.content
-        }
-
-        if (updateNoteItemDTO.top) {
-            noteItem.top = updateNoteItemDTO.top
-        }
-
-        if (updateNoteItemDTO.left) {
-            noteItem.left = updateNoteItemDTO.left
-        }
-
-        if (updateNoteItemDTO.width) {
-            noteItem.width = updateNoteItemDTO.width
-        }
-
-        if (updateNoteItemDTO.height) {
-            noteItem.height = updateNoteItemDTO.height
-        }
-
-        // set update date
+        noteItem.headline = updateNoteItemDTO.headline ?? noteItem.headline
+        noteItem.content = updateNoteItemDTO.content ?? noteItem.content
+        noteItem.top = updateNoteItemDTO.top ?? noteItem.top
+        noteItem.left = updateNoteItemDTO.left ?? noteItem.left
+        noteItem.width = updateNoteItemDTO.width ?? noteItem.width
+        noteItem.height = updateNoteItemDTO.width ?? noteItem.height
         noteItem.updatedDate = new Date();
 
         // prepare result
         let resultObj : UpdateItemResultInterface;
 
         try {
-            await this.repository.save(noteItem)
+            await this.repository.update({id: noteItem.id}, noteItem)
 
             resultObj = {
                 status: true,
@@ -114,7 +128,7 @@ export class NoteItemsService {
         } catch (e) {
             resultObj = {
                 status: false,
-                updatedData: null
+                updatedData: e
             }
         }
 

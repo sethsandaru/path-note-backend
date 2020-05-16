@@ -35,7 +35,7 @@ export class NoteItemsController {
         @Param('noteItemId') noteItemId : number,
         @Body() updateDTO : UpdateNoteItemDTO
     ) : Promise<UpdateItemResultInterface> {
-        return this.service.updateNoteItem(noteItemId, updateDTO)
+        return this.service.updateNoteItem(updateDTO, noteItemId)
     }
 
     @Delete('/update/:noteItemId')

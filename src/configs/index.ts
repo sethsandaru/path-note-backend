@@ -31,7 +31,6 @@ class Configuration {
      * @param path
      */
     getLangText(path : string) : string {
-        console.log(this.injectedConfigurations)
         return this.get('langText.' + path)
     }
 }

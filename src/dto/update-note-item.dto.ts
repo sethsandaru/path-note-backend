@@ -1,5 +1,8 @@
 
 export class UpdateNoteItemDTO {
+    // must-for-webSocket
+    noteSpaceId: number
+
     // id?
     id?: number
 

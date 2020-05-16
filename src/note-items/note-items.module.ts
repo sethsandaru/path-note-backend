@@ -4,6 +4,7 @@ import {NoteItemsService} from './note-items.service';
 import {NoteSpaceModule} from "@src/note-space/note-space.module";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {NoteItemEntity} from "@entities/note-item.entity";
+import {NoteItemsGateway} from "@src/note-items/note-items.gateway";
 
 @Module({
     imports: [
@@ -11,7 +12,7 @@ import {NoteItemEntity} from "@entities/note-item.entity";
         NoteSpaceModule
     ],
     controllers: [NoteItemsController],
-    providers: [NoteItemsService]
+    providers: [NoteItemsService, NoteItemsGateway]
 })
 export class NoteItemsModule {
 }

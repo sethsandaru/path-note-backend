@@ -8,6 +8,10 @@ import {Column} from "typeorm";
 
 export abstract class BaseDateEntity {
 
+    constructor() {
+        this.createdDate = new Date();
+    }
+
     @Column({name: "created_date", type: "datetime"})
     createdDate: Date;
 

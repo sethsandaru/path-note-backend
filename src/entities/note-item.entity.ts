@@ -1,5 +1,5 @@
 import {BaseDateEntity} from "./types/base-date.entity";
-import {Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {NoteSpaceEntity} from "./note-space.entity";
 
 @Entity('note_items')
@@ -14,7 +14,7 @@ export class NoteItemEntity extends BaseDateEntity {
 
     @Column({
         name: "note_space_id",
-        type: "integer",
+        type: "integer"
     })
     noteSpaceId: number;
 
@@ -53,5 +53,6 @@ export class NoteItemEntity extends BaseDateEntity {
      * N items - 1 NoteSpace
      */
     @ManyToOne(type => NoteSpaceEntity, space => space.noteItems)
+    @JoinColumn({name: 'note_space_id'})
     noteSpace: NoteSpaceEntity;
 }

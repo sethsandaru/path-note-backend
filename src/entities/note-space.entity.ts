@@ -91,12 +91,14 @@ export class NoteSpaceEntity extends BaseDateEntity{
      * 1 NoteSpace - N Items
      */
     @OneToMany(type => NoteItemEntity, item => item.noteSpace)
+    @JoinColumn({name: 'note_space_id'})
     noteItems: NoteItemEntity[];
 
     /**
      * 1 NoteSpace - N Accesses
      */
     @OneToMany(type => NoteSpaceAccessEntity, item => item.noteSpace)
+    @JoinColumn({name: 'note_space_id'})
     noteAccesses: NoteSpaceAccessEntity[];
 
     /****

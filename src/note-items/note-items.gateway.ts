@@ -26,6 +26,14 @@ export class NoteItemsGateway {
             });
     }
 
+    @SubscribeMessage('leave-note-space')
+    async leaveNoteSpace(client: Socket, data: { noteSpaceId: number }) {
+        client.leave(data.noteSpaceId.toString())
+            .emit('noteSpaceJoined', {
+                event: 'left'
+            });
+    }
+
     @SubscribeMessage('create-note-item')
     async createNoteItem(client: Socket, payload: { noteSpaceId: number }) {
         const result = {status: true, data: null};
@@ -36,14 +44,16 @@ export class NoteItemsGateway {
             result.data = e;
         }
 
-        client.join(payload.noteSpaceId.toString())
+        client.broadcast
+            .to(payload.noteSpaceId.toString())
             .emit('noteItemAdded', result);
     }
 
     @SubscribeMessage('update-note-item')
     async updateNoteItem(client: Socket, payload : UpdateNoteItemDTO)  {
         let updatedDataInfo = await this.noteItemsService.updateNoteItem(payload)
-        client.join(payload.noteSpaceId.toString())
+        client.broadcast
+            .to(payload.noteSpaceId.toString())
             .emit('noteItemUpdated', updatedDataInfo);
     }
 
@@ -51,8 +61,9 @@ export class NoteItemsGateway {
     async deleteNoteItem(client: Socket, payload : { noteSpaceId : number, id : number }) {
         await this.noteItemsService.deleteNoteItem(payload.id)
 
-        client.join(payload.noteSpaceId.toString())
-            .emit('noteItemUpdated', {
+        client.broadcast
+            .to(payload.noteSpaceId.toString())
+            .emit('noteItemDeleted', {
                 event: 'deleted-note',
                 id: payload.id
             });

@@ -112,7 +112,7 @@ export class NoteItemsService {
         noteItem.top = updateNoteItemDTO.top ?? noteItem.top
         noteItem.left = updateNoteItemDTO.left ?? noteItem.left
         noteItem.width = updateNoteItemDTO.width ?? noteItem.width
-        noteItem.height = updateNoteItemDTO.width ?? noteItem.height
+        noteItem.height = updateNoteItemDTO.height ?? noteItem.height
         noteItem.updatedDate = new Date();
 
         // prepare result

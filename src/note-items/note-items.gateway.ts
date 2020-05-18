@@ -46,4 +46,16 @@ export class NoteItemsGateway {
         client.join(payload.noteSpaceId.toString())
             .emit('noteItemUpdated', updatedDataInfo);
     }
+
+    @SubscribeMessage('delete-note-item')
+    async deleteNoteItem(client: Socket, payload : { noteSpaceId : number, id : number }) {
+        await this.noteItemsService.deleteNoteItem(payload.id)
+
+        client.join(payload.noteSpaceId.toString())
+            .emit('noteItemUpdated', {
+                event: 'deleted-note',
+                id: payload.id
+            });
+    }
+
 }

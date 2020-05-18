@@ -134,4 +134,18 @@ export class NoteItemsService {
 
         return new Promise(r => r(resultObj))
     }
+
+    async deleteNoteItem(id : number) {
+        const noteItem = await this.getById(id)
+        if (!noteItem) {
+            throw new BadRequestException(
+                Config.getLangText('noteItem.errorMessages.notExists')
+            )
+        }
+
+        // soft-delete
+        noteItem.deletedDate = new Date();
+
+        return this.repository.save(noteItem)
+    }
 }

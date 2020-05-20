@@ -84,6 +84,9 @@ export class NoteItemsService {
         // DEFAULT DATA
         item.headline = Config.getLangText('noteItem.defaultHeadline')
         item.content = Config.getLangText('noteItem.defaultContent')
+        item.width = 250
+        item.height = 150
+        item.color = 0
 
         await this.repository.save(item)
         return this.getById(item.id)

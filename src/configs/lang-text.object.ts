@@ -27,6 +27,7 @@ export default {
 
         defaultHeadline: "Headline goes here - double click to change",
         defaultContent: "Body goes here - double click to change",
+        defaultWidth: 250,
     }
 
 }

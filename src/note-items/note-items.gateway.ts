@@ -2,6 +2,8 @@ import {SubscribeMessage, WebSocketGateway} from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import {UpdateNoteItemDTO} from "@dto/update-note-item.dto";
 import {NoteItemsService} from "@src/note-items/note-items.service";
+import CreateNoteItemDTO from "@dto/create-note-item.dto";
+import {NoteItemEntity} from "@entities/note-item.entity";
 
 @WebSocketGateway()
 export class NoteItemsGateway {
@@ -35,10 +37,11 @@ export class NoteItemsGateway {
     }
 
     @SubscribeMessage('create-note-item')
-    async createNoteItem(client: Socket, payload: { noteSpaceId: number }) {
+    async createNoteItem(client: Socket, payload: CreateNoteItemDTO) {
         const result = {status: true, data: null};
+
         try {
-            result.data = await this.noteItemsService.addNewBlankNoteItem(payload.noteSpaceId)
+            result.data = await this.noteItemsService.addNote(payload)
         } catch (e) {
             result.status = false;
             result.data = e;
@@ -47,6 +50,13 @@ export class NoteItemsGateway {
         client.broadcast
             .to(payload.noteSpaceId.toString())
             .emit('noteItemAdded', result);
+    }
+
+    @SubscribeMessage('created-blank-note-item')
+    async createdBlankNoteNotify(client: Socket, payload: NoteItemEntity) {
+        client.broadcast
+            .to(payload.noteSpaceId.toString())
+            .emit('noteItemAddedAPI', payload);
     }
 
     @SubscribeMessage('update-note-item')

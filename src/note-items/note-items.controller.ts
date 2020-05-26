@@ -1,8 +1,9 @@
-import {Body, Controller, Delete, Get, HttpCode, Param, Post, Put} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query} from '@nestjs/common';
 import {NoteItemsService} from "@src/note-items/note-items.service";
 import {NoteItemEntity} from "@entities/note-item.entity";
 import {UpdateNoteItemDTO} from "@dto/update-note-item.dto";
 import {UpdateItemResultInterface} from "@interfaces/note-items/update-item-result.interface";
+import CreateNoteItemDTO from "@dto/create-note-item.dto";
 
 @Controller('note-items')
 export class NoteItemsController {
@@ -23,10 +24,18 @@ export class NoteItemsController {
 
     @Post('/create')
     @HttpCode(200)
-    async createNoteItem(
-        @Body() hello : string //TODO: Switch to DTO
+    async createBlankNoteItem(
+        @Query('note-space-id') noteSpaceId : number
     ) {
+        return this.service.addNewBlankNoteItem(noteSpaceId)
+    }
 
+    @Post('/create')
+    @HttpCode(200)
+    async createNoteItem(
+        @Body() data : CreateNoteItemDTO
+    ) {
+        return this.service.addNote(data)
     }
 
     @Put('/update/:noteItemId')

@@ -6,6 +6,7 @@ import {NoteSpaceService} from "@src/note-space/note-space.service";
 import {UpdateNoteItemDTO} from "@dto/update-note-item.dto";
 import {UpdateItemResultInterface} from "@interfaces/note-items/update-item-result.interface";
 import {Config} from "@src/configs";
+import CreateNoteItemDTO from "@dto/create-note-item.dto";
 
 @Injectable()
 export class NoteItemsService {
@@ -25,20 +26,7 @@ export class NoteItemsService {
         return this.repository.findOne({
             where: {
                 id: noteItemId,
-            },
-            select: [
-                "id",
-                "headline",
-                "content",
-                "isRichContent",
-                "top",
-                "left",
-                "width",
-                "height",
-                "updatedDate",
-                "color"
-            ],
-            relations: []
+            }
         })
     }
 
@@ -90,6 +78,26 @@ export class NoteItemsService {
 
         await this.repository.save(item)
         return this.getById(item.id)
+    }
+
+    /**
+     * Add Note-Item based on Data from FrontEnd
+     * @param data
+     */
+    addNote(
+        data : CreateNoteItemDTO
+    ) : Promise<NoteItemEntity> {
+        const item = new NoteItemEntity();
+
+        // assigning data
+        item.noteSpaceId = data.noteSpaceId
+        item.headline = data.headline
+        item.content = data.content
+        item.width = data.width
+        item.height = data.height
+        item.color = data.color
+
+        return this.repository.save(item)
     }
 
     /**
